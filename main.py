@@ -2,6 +2,9 @@ import time
 from diffusers import StableDiffusionPipeline
 from diffusers.utils import export_to_video
 from diffusers import DiffusionPipeline
+from safetensors.torch import load
+from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
+
 # from diffusers.pipelines import dance_diffusion
 # from diffusers.utils import make_image_grid
 import torch
@@ -25,14 +28,22 @@ def text_to_image(model: str, prompt: str, fileName: str):
         result[r].save("results/"+fileName+r+".png")
 
 def single_file(prompt:str, model: str, fileName: str, time: str):
-    pipeline = StableDiffusionPipeline.from_single_file(
-        model
-        # "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors"
-    ).to("mps")
+    if model[-11] == "safetensors":
+        print("Model: {}".format(model[-11]))
+        model_weights = load(model)
+        pipeline = StableDiffusionPipeline.from_pretrained(model_weights).to("mps")
+    
+    else:
+        pipeline = StableDiffusionPipeline.from_single_file(
+            model
+            # "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors"
+        ).to("mps")
+    pipeline.enable_xformers_memory_efficient_attention(attention_op=MemoryEfficientAttentionFlashAttentionOp)
 
     pipeline.enable_attention_slicing()
-    pipeline.load_textual_inversion("models/21charturnerv2.pt", token="charturnerv2")
-
+    # pipeline.load_textual_inversion("models/21charturnerv2.pt", token="charturnerv2")
+    pipeline .load_textual_inversion("./21charturnerv2.pt", token="charturnerv2")
+ 
     print("model: {}".format(model))
 
     result = pipeline(prompt, num_inference_steps=40, guidance_scale=11).images
@@ -66,4 +77,4 @@ def main( model: str, prompt: str, fileName: str,mode="image"):
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
-main("models/jyzjk.safetensors", "masterpiece, Adobe Photo, korean, realistic, beautiful", "test", "single")
+main("models/Realistic_Vision_V5.1.ckpt", "masterpiece, Adobe Photo, korean, realistic, beautiful", "test", "single")
