@@ -38,21 +38,20 @@ def single_file(prompt:str, model: str, fileName: str, time: str):
             model
             # "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors"
         ).to("mps")
-    pipeline.enable_xformers_memory_efficient_attention(attention_op=MemoryEfficientAttentionFlashAttentionOp)
+    # pipeline.enable_xformers_memory_efficient_attention(attention_op=MemoryEfficientAttentionFlashAttentionOp)
 
     pipeline.enable_attention_slicing()
     # pipeline.load_textual_inversion("models/21charturnerv2.pt", token="charturnerv2")
-    pipeline .load_textual_inversion("./21charturnerv2.pt", token="charturnerv2")
  
     print("model: {}".format(model))
 
-    result = pipeline(prompt, num_inference_steps=40, guidance_scale=11).images
+    result = pipeline(prompt, num_inference_steps=40, guidance_scale=11, width=1024, height=1024).images
 
     print("Generate Finished: {}".format(fileName))
 
     for r in range(len(result)):
-        result[r].save("results/"+fileName+str(r)+".png")
-        print("File saveed to {}".format("results/"+time+fileName+str(r)+".png"))
+        result[r].save("results/"+fileName+"_"+time+"_"+str(r)+".png")
+        print("File saveed to {}".format("results/"+fileName+"_"+time+"_"+str(r)+".png"))
 
 def generate_video():
     pipe = DiffusionPipeline.from_pretrained("damo-vilab/text-to-video-ms-1.7b", torch_dtype=torch.float16, use_safetensors=True, variant="fp16").to("mps")
