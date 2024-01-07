@@ -4,7 +4,7 @@ from diffusers.utils import export_to_video
 from diffusers import DiffusionPipeline
 from safetensors.torch import load
 from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
-
+import os
 # from diffusers.pipelines import dance_diffusion
 # from diffusers.utils import make_image_grid
 import torch
@@ -66,17 +66,22 @@ def generate_video():
     video_frames = pipe(prompt, num_frames=64).frames
     video_path = export_to_video(video_frames)
 
-def main( model: str, prompt: str, fileName: str,mode="image"):
+def main( filePath: str, prompt: str, fileName: str, mode="image"):
     start = time.time()
+    models = os.listdir(filePath)
+
+    print("Model Lists: {}".format(models))
+    model = int(input("Select Model Number: "))
+
     if mode == "image":
-        text_to_image(model, prompt, fileName)
+        text_to_image( models[model - 1], prompt, fileName)
 
     if mode == "single":
-        single_file(prompt, model, fileName, str(start))
+        single_file(prompt, models[model - 1], fileName, str(start))
 
     if mode =="video":
         generate_video()
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
-main("models/Realistic_Vision_V5.1.ckpt", "masterpiece, Donald Trumph, Joe Viden", "test", "single")
+main("models/image", "masterpiece, Donald Trumph, Joe Viden", "test", "single")
