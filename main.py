@@ -31,22 +31,26 @@ def text_to_image(model: str, prompt: str, fileName: str):
         result[r].save("results/"+fileName+r+".png")
 
 def single_file(prompt:str, model: str, fileName: str, time: str):
-    if model[-11] == "safetensors":
-        print("Model: {}".format(model[-11]))
-        model_weights = load(model)
-        pipeline = StableDiffusionPipeline.from_pretrained(model_weights).to("mps")
-    
-    else:
-        pipeline = StableDiffusionPipeline.from_single_file(
-            model
-            # "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors"
-        ).to("mps")
+    MODEL_ID = 'stabilityai/stable-diffusion-2-1'
+
+    pipeline = StableDiffusionPipeline.from_pretrained(MODEL_ID).to("mps")
+
+    # if model[-11] == "safetensors":
+    #     print("Model: {}".format(model[-11]))
+    #     model_weights = load(model)
+    #     pipeline = StableDiffusionPipeline.from_pretrained(MODEL_ID, model_weights).to("mps")
+
+    # else:
+    #     pipeline = StableDiffusionPipeline.from_single_file(
+    #         model
+    #         # "https://huggingface.co/WarriorMama777/OrangeMixs/blob/main/Models/AbyssOrangeMix/AbyssOrangeMix.safetensors"
+    #     ).to("mps")
     # pipeline.enable_xformers_memory_efficient_attention(attention_op=MemoryEfficientAttentionFlashAttentionOp)
 
     pipeline.enable_attention_slicing()
     # pipeline.load_textual_inversion("models/21charturnerv2.pt", token="charturnerv2")
  
-    print("model: {}".format(model))
+    # print("model: {}".format(model))
 
     result = pipeline(prompt, num_inference_steps=40, guidance_scale=9, width=640, height=640).images
 
