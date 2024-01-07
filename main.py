@@ -34,8 +34,8 @@ def main(prompt: str, fileName: str, mode="image"):
         generate_video()
     
     if mode =="lora":
-        lcm_lora(prompt, fileName)
+        lcm_lora(prompt, fileName, step=120, guidance_scale=9)
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
-main("masterpiece, Donald Trumph, Joe Viden", "test.png", "lora")
+main("masterpiece, Donald Trumph, Joe Viden, Adobe Photoshop", "trump_biden.png", "lora")
