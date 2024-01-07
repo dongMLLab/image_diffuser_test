@@ -15,12 +15,14 @@ def main(prompt: str, fileName: str, mode="image"):
 
     if mode == "image" or mode == "single":
         models = os.listdir("models/image")
+        print("Model Lists: {}".format(models))
+        model = int(input("Select Model Number: "))
 
     else:
         models = os.listdir("models/video")
+        print("Model Lists: {}".format(models))
+        model = int(input("Select Model Number: "))
 
-    print("Model Lists: {}".format(models))
-    model = int(input("Select Model Number: "))
 
     if mode == "image":
         text_to_image( models[model - 1], prompt, fileName)
@@ -32,7 +34,7 @@ def main(prompt: str, fileName: str, mode="image"):
         generate_video()
     
     if mode =="lora":
-        lcm_lora(prompt)
+        lcm_lora(prompt, fileName)
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
