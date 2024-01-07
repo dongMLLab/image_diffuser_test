@@ -7,4 +7,4 @@
 - single
 
 - lora
-    <img src="results/sample.png"/>
+    <img src="sample.png"/>
