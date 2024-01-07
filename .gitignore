@@ -2,8 +2,10 @@
 *.safetensors
 *.pt
 
-*.png
-results/*
+
+results/*.png
+results/*.jpg
+results/*.jpeg
 
 .DS_Store
 
