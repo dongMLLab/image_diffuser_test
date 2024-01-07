@@ -3,8 +3,14 @@
 ## modes
 
 - image
+    - testing load and generate image from local model
 
 - single
+    - testing load and generate image from local model
 
 - lora
-    <img src="sample.png"/>
+    - tested with 
+        - stabilityai/stable-diffusion-xl-base-1.0
+        - latent-consistency/lcm-lora-sdxl
+
+<img src="sample.png"/>
