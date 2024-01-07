@@ -11,6 +11,7 @@
 - lora
     - tested with 
         - stabilityai/stable-diffusion-xl-base-1.0
-        - latent-consistency/lcm-lora-sdxl
+        
+        - [latent-consistency/lcm-lora-sdxl](https://huggingface.co/latent-consistency/lcm-lora-sdxl)
 
 <img src="sample.png"/>
