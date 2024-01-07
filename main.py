@@ -66,9 +66,14 @@ def generate_video():
     video_frames = pipe(prompt, num_frames=64).frames
     video_path = export_to_video(video_frames)
 
-def main( filePath: str, prompt: str, fileName: str, mode="image"):
+def main(prompt: str, fileName: str, mode="image"):
     start = time.time()
-    models = os.listdir(filePath)
+
+    if mode == "image" or mode == "single":
+        models = os.listdir("models/image")
+
+    else:
+        models = os.listdir("models/video")
 
     print("Model Lists: {}".format(models))
     model = int(input("Select Model Number: "))
@@ -84,4 +89,4 @@ def main( filePath: str, prompt: str, fileName: str, mode="image"):
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
-main("models/image", "masterpiece, Donald Trumph, Joe Viden", "test", "single")
+main("masterpiece, Donald Trumph, Joe Viden", "test", "single")
