@@ -9,12 +9,15 @@ from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
 # from diffusers.utils import make_image_grid
 import torch
 
+PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
+
 def text_to_image(model: str, prompt: str, fileName: str):
     DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     print("Device: {}".format(DEVICE))
 
     pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16,revision="fp16",).to("mps")
+
     pipe.enable_attention_slicing()
     pipe.load_textual_inversion("models/charturnerv2.pt", token="charturnerv2")
 
@@ -45,7 +48,7 @@ def single_file(prompt:str, model: str, fileName: str, time: str):
  
     print("model: {}".format(model))
 
-    result = pipeline(prompt, num_inference_steps=40, guidance_scale=11, width=1024, height=1024).images
+    result = pipeline(prompt, num_inference_steps=40, guidance_scale=9, width=640, height=640).images
 
     print("Generate Finished: {}".format(fileName))
 
@@ -76,4 +79,4 @@ def main( model: str, prompt: str, fileName: str,mode="image"):
 
 # "models/Realistic_Vision_V5.1.ckpt"
 # "models/jyzjk.safetensors"
-main("models/Realistic_Vision_V5.1.ckpt", "masterpiece, Adobe Photo, korean, realistic, beautiful", "test", "single")
+main("models/Realistic_Vision_V5.1.ckpt", "masterpiece, Donald Trumph, Joe Viden", "test", "single")
